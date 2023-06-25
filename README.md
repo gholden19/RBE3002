@@ -1,7 +1,7 @@
 # RBE3002 Team 19 Lab Repository
 
 
-## Weeks 1&2
+## Weeks 1&2: Introduction to ROS & Robot Kinematics and Odometry
 
 - Get comfortable with creating ROS Nodes in Python and launch files.
 - Get familiar with the Publisher/Subscriber Paradigm used by ROS Topics.
@@ -10,7 +10,7 @@
 - Create a planned trajectory and track the TurtleBot3's position.
 
 
-## Weeks 3&4
+## Weeks 3&4: Pathfinding and Simulation
 
 - Implement the A* pathfinding algorithm on a given environment map to plan paths.
 - Visualize the progression of A* using RViz.
@@ -19,7 +19,7 @@
 - Demonstrate the TurtleBot3 following a path.
 
 
-## Weeks 5-7 (Final Project)
+## Weeks 5-7: Navigating Frontiers and Optimizing Paths (Final Project)
 
 - Simultaneous Localization and Mapping (SLAM).
 - Localize the TurtleBot3 in a real environment.
