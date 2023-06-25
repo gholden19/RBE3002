@@ -1,0 +1,16 @@
+<launch>
+
+    <arg name="real" default="0"/>
+
+    <group unless="$(arg real)">
+        <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_empty_world.launch"/> 
+        <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_gazebo_rviz.launch"/> 
+        <node pkg="rbe3002_lab2" type="lab2.py" name="lab2"/>
+    </group>
+
+    <group if="$(arg real)">
+        <include file="$(find turtlebot3_bringup)/launch/turtlebot3_model.launch"/> 
+        <node pkg="rbe3002_lab2" type="lab2.py" name="lab2"/>
+    </group>
+
+</launch>

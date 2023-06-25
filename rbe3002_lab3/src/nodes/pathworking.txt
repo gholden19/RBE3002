@@ -1,0 +1,139 @@
+#path working but showing up as wavefront with type grid cells 
+
+def a_star(self, mapdata, start, goal):
+        """
+        :param mapdata [OccupancyGrid]: Map data
+        :param start   [(int, int)]: Starting point
+        :param goal    [(int, int)]: Goal point
+        :return path [[(int, int))]: Path, tuple list
+        
+        """
+        ### REQUIRED CREDIT
+        rospy.loginfo("Got to Astarrrrrrrrrr")
+        frontier = PriorityQueue()  #not yet explored 2 publishers
+        frontier.put(start, 0)
+        came_from = dict() # already been visited
+        cost_so_far = dict()
+        came_from[start] = None
+        cost_so_far[start] = 0
+        cells = [] #empty cell list
+        
+        # publish to rviz every node we visited
+        # get all keys from came_from
+        
+        while not frontier.empty():
+            current = frontier.get()
+
+            if current == goal:
+                break
+
+            for next in self.neighbors_of_4(mapdata,current[0],current[1]):
+                new_cost = cost_so_far[current] + 1 # self.euclidean_distance(current.x, current.y, next.x, next.y)
+                if next not in cost_so_far or new_cost < cost_so_far[next]:
+                    cost_so_far[next] = new_cost 
+                    priority = new_cost + self.euclidean_distance(goal[0], goal[1], next[0], next[1])
+                    frontier.put(next, priority)
+                    came_from[next] = current
+
+            msg_astr = GridCells()
+            msg_desired = Path()
+            msg_astr.cell_height = mapdata.map.info.resolution
+            msg_astr.cell_width = mapdata.map.info.resolution
+            msg_astr.header.frame_id = "map"
+            msg_desired.header.frame_id = "path"
+            points_astr = [] # List of points
+            desired_path = []
+
+            cells_so_far = []
+            loop_point = current
+            while True:
+                cells_so_far.append(loop_point)
+
+                if loop_point == start:
+                    break
+                else:
+                    loop_point = came_from[loop_point]
+
+            for cell in cells_so_far:
+                grid_point = Point()
+                grid_point.x = cell[0]
+                grid_point.y = cell[1]
+                grid_point.z = 0
+                wrld_point = PathPlanner.grid_to_world(mapdata, grid_point.x, grid_point.y)
+                points_astr.append(wrld_point)
+            msg_astr.cells = points_astr
+            self.wavefront.publish(msg_astr)
+
+        #points_astr.reverse()
+        #rospy.loginfo(points_astr)
+        #desired_path.append(points_astr)
+        #test = self.path_to_message(mapdata, desired_path)
+        #self.path.publish(test)
+        
+        #rospy.sleep(0.01)
+        
+# astar with wavefront working as wavefront 
+
+    def a_star(self, mapdata, start, goal):
+        """
+        :param mapdata [OccupancyGrid]: Map data
+        :param start   [(int, int)]: Starting point
+        :param goal    [(int, int)]: Goal point
+        :return path [[(int, int))]: Path, tuple list
+        
+        """
+        ### REQUIRED CREDIT
+        rospy.loginfo("Got to Astarrrrrrrrrr")
+        frontier = PriorityQueue()  #not yet explored 2 publishers
+        frontier.put(start, 0)
+        came_from = dict() # already been visited
+        cost_so_far = dict()
+        came_from[start] = None
+        cost_so_far[start] = 0
+        cells = [] #empty cell list
+        
+        # publish to rviz every node we visited
+        # get all keys from came_from
+        
+        while not frontier.empty():
+            current = frontier.get()
+
+            if current == goal:
+                break
+
+            
+        
+
+            for next in self.neighbors_of_4(mapdata,current[0],current[1]):
+                new_cost = cost_so_far[current] + 1 # self.euclidean_distance(current.x, current.y, next.x, next.y)
+                if next not in cost_so_far or new_cost < cost_so_far[next]:
+                    cost_so_far[next] = new_cost 
+                    priority = new_cost + self.euclidean_distance(goal[0], goal[1], next[0], next[1])
+                    frontier.put(next, priority)
+                    came_from[next] = current
+            msg_astr = GridCells()
+            msg_astr.cell_height = mapdata.map.info.resolution
+            msg_astr.cell_width = mapdata.map.info.resolution
+            msg_astr.header.frame_id = "map"
+            points__astr = [] # List of points
+            cells_so_far = list(came_from.keys())
+            for cell in cells_so_far:
+                grid_point = Point()
+                grid_point.x = cell[0]
+                grid_point.y = cell[1]
+                grid_point.z = 0
+                wrld_point = PathPlanner.grid_to_world(mapdata, grid_point.x, grid_point.y)
+                points__astr.append(wrld_point)
+            msg_astr.cells = points__astr
+            self.wavefront.publish(msg_astr)
+            rospy.sleep(0.01)
+
+        #rospy.loginfo("Executing A* from (%d,%d) to (%d,%d)" % (start[0], start[1], goal[0], goal[1]))
+        desired_path = []
+        for cell in points__astr:
+            desired_path.append(points__astr.reverse())
+            desired_path.insert(0, current)
+            while not came_from[current] is None:
+                desired_path.insert(0, came_from[current])
+                current = came_from[current]
+        self.path.publish(msg_astr)

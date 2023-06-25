@@ -1,0 +1,36 @@
+<launch>
+
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_empty_world.launch"/> 
+
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch"/> 
+
+    <node pkg="rbe3002_lab3" type="path_planner.py" name="path_planner" output="screen"/>
+
+    <node pkg="rbe3002_lab3" type="priority_queue.py" name="priority_queue" output="screen"/>
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find rbe3002_lab3)/src/rviz/turtlebot3_lab3_map.rviz"/>
+
+    <node type="map_server" name="maps" pkg="map_server" args="$(find rbe3002_lab3)/src/maps/simple_map.yaml"/>
+
+    <node pkg="tf" type="static_transform_publisher" name="transformation" args="0 0 0 0 0 0 /map /odom 100"/> 
+
+   <node pkg="rbe3002_lab3" type="lab3.py" name="lab3" output="screen"/>
+
+   <node pkg="rbe3002_lab3" type="lab2.py" name="lab2" output="screen"/>
+
+     <!-- Arguments -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
+  <arg name="set_base_frame" default="base_footprint"/>
+  <arg name="set_odom_frame" default="odom"/>
+  <arg name="set_map_frame"  default="map"/>
+
+  <!-- Gmapping -->
+  <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen">
+    <param name="base_frame" value="$(arg set_base_frame)"/>
+    <param name="odom_frame" value="$(arg set_odom_frame)"/>
+    <param name="map_frame"  value="$(arg set_map_frame)"/>
+    <rosparam command="load" file="$(find turtlebot3_slam)/config/gmapping_params.yaml" />
+  </node>
+  
+</launch>
