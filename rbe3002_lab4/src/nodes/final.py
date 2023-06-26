@@ -418,7 +418,7 @@ class Final:
         # publish each pose so the robot can actually drive there
       # should skip first node because the robot is already there
       #rospy.loginfo(msg)
-      rospy.loginfo("I AM IN THE FUCKING DRIVE FUNCTIONNNNNNNNNNNNN")
+      rospy.loginfo("I AM IN THE DRIVE FUNCTION")
       for pose in msg.poses[1:len(msg.poses)/2]:
         rospy.loginfo("Drive Pose: " + str(pose))
         self.go_to(pose)
@@ -1176,7 +1176,7 @@ class Final:
 
             frontier_msg = self.a_star(data, (real_msg.x, real_msg.y), (real_goal.x, real_goal.y))
             self.drive_robot(frontier_msg)
-            rospy.loginfo("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+            rospy.loginfo("got throught drive !!")
             self.send_speed(0, 0)
 
         rospy.spin()
