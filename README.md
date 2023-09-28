@@ -1,4 +1,4 @@
-# RBE3002 Team 19 Lab Repository
+# RBE 302 Lab Repository
 
 
 ## Weeks 1&2: Introduction to ROS & Robot Kinematics and Odometry
